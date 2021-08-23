@@ -207,4 +207,5 @@ public class ComponentsDefine {
   
     public static final OfficialComponent GUAVA_CACHE = new OfficialComponent(114, "GuavaCache");
 
+    public static final OfficialComponent HU_TOOL = new OfficialComponent(115, "HuTool");
 }

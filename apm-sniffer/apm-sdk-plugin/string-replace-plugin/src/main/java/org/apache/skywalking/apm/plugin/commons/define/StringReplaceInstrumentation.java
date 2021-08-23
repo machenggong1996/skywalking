@@ -15,7 +15,7 @@ import org.apache.skywalking.apm.agent.core.plugin.match.NameMatch;
  * @author machenggong
  * @since 2021/8/18
  */
-public class StringReplaceInstrumentation extends ClassInstanceMethodsEnhancePluginDefine{
+public class StringReplaceInstrumentation extends ClassStaticMethodsEnhancePluginDefine{
 
     public static final String INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.commons.StringReplaceInterceptor";
     public static final String ENHANCE_CLASS = "org.apache.commons.lang3.StringUtils";

@@ -27,7 +27,7 @@ public class StringReplaceInterceptor implements StaticMethodsAroundInterceptor 
          * 也可自己new OfficialComponent或者Component
          * 不过在Skywalking的控制台上不会被识别，只会显示N/A
          */
-        span.setComponent(ComponentsDefine.REPLACE);
+        span.setComponent(ComponentsDefine.TOMCAT);
         System.out.println("开始监控");
         span.tag(new StringTag(1000, "params"), argumentsTypes[0].toString());
         // 指定该调用的layer，layer是个枚举
@@ -36,7 +36,7 @@ public class StringReplaceInterceptor implements StaticMethodsAroundInterceptor 
 
     @Override
     public Object afterMethod(Class aClass, Method method, Object[] objects, Class<?>[] classes, Object o) {
-        String retString = (String) o;
+        //String retString = (String) o;
         // 激活span，本质上是读取ThreadLocal对象
         AbstractSpan span = ContextManager.activeSpan();
         // 状态码，任意写，Tags也是个Skywalking的工具类，用来比较方便地操作tag
@@ -45,7 +45,7 @@ public class StringReplaceInterceptor implements StaticMethodsAroundInterceptor 
         // 停止span(监控的结束)，本质上是清理ThreadLocal对象
         ContextManager.stopSpan();
         System.out.println("结束监控");
-        return retString;
+        return o;
     }
 
     @Override
