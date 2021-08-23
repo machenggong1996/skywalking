@@ -20,6 +20,7 @@ package org.apache.skywalking.apm.agent.core.plugin.match;
 
 /**
  * Match the class with an explicit class name.
+ * 全类名直接匹配
  */
 public class NameMatch implements ClassMatch {
     private String className;
