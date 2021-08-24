@@ -133,11 +133,12 @@ public class SkyWalkingAgent {
                     .installOn(instrumentation);
 
         try {
+            // 启动
             ServiceManager.INSTANCE.boot();
         } catch (Exception e) {
             LOGGER.error(e, "Skywalking agent boot failure.");
         }
-
+        // jvm关闭钩子
         Runtime.getRuntime()
                 .addShutdownHook(new Thread(ServiceManager.INSTANCE::shutdown, "skywalking service shutdown thread"));
     }

@@ -15,5 +15,4 @@
 # limitations under the License.
 
 # apm-string-replace-plugin-1.x=org.apache.skywalking.apm.plugin.commons.define.StringReplaceInstrumentation
-# kw-plugin-1.x=org.apache.skywalking.apm.plugin.commons.define.KwCoreActivation
 hutool-plugin-1.x=org.apache.skywalking.apm.plugin.commons.define.HuToolInstrumentation

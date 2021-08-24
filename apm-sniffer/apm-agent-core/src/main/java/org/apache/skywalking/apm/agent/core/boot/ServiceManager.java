@@ -30,6 +30,10 @@ import org.apache.skywalking.apm.agent.core.logging.api.LogManager;
 import org.apache.skywalking.apm.agent.core.plugin.loader.AgentClassLoader;
 
 /**
+ * 1. 所有的插件服务都必须直接或者间接的实现BootService接口,DefaultImplementor默认实现 OverrideImplementor 覆盖实现
+ * 2. OverrideImplementor value是覆盖哪个实现
+ * 3. 覆盖实现只能明确一个 不能再被覆盖
+ *
  * The <code>ServiceManager</code> bases on {@link ServiceLoader}, load all {@link BootService} implementations.
  */
 public enum ServiceManager {
@@ -39,6 +43,7 @@ public enum ServiceManager {
     private Map<Class, BootService> bootedServices = Collections.emptyMap();
 
     public void boot() {
+        // 加载所有的服务
         bootedServices = loadAllServices();
 
         prepare();
@@ -62,6 +67,7 @@ public enum ServiceManager {
         load(allServices);
         for (final BootService bootService : allServices) {
             Class<? extends BootService> bootServiceClass = bootService.getClass();
+            // 服务默认实现
             boolean isDefaultImplementor = bootServiceClass.isAnnotationPresent(DefaultImplementor.class);
             if (isDefaultImplementor) {
                 if (!bootedServices.containsKey(bootServiceClass)) {
@@ -70,6 +76,7 @@ public enum ServiceManager {
                     //ignore the default service
                 }
             } else {
+                // 服务覆盖实现
                 OverrideImplementor overrideImplementor = bootServiceClass.getAnnotation(OverrideImplementor.class);
                 if (overrideImplementor == null) {
                     if (!bootedServices.containsKey(bootServiceClass)) {
@@ -80,6 +87,7 @@ public enum ServiceManager {
                 } else {
                     Class<? extends BootService> targetService = overrideImplementor.value();
                     if (bootedServices.containsKey(targetService)) {
+                        // 只能覆盖默认实现
                         boolean presentDefault = bootedServices.get(targetService)
                                                                .getClass()
                                                                .isAnnotationPresent(DefaultImplementor.class);
@@ -141,6 +149,7 @@ public enum ServiceManager {
     }
 
     void load(List<BootService> allServices) {
+        // spi机制
         for (final BootService bootService : ServiceLoader.load(BootService.class, AgentClassLoader.getDefault())) {
             allServices.add(bootService);
         }
