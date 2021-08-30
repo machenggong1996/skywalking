@@ -21,6 +21,9 @@ package org.apache.skywalking.apm.agent.core.boot;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 线程工厂
+ */
 public class DefaultNamedThreadFactory implements ThreadFactory {
     private static final AtomicInteger BOOT_SERVICE_SEQ = new AtomicInteger(0);
     private final AtomicInteger threadSeq = new AtomicInteger(0);

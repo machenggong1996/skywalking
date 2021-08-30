@@ -31,12 +31,23 @@ import java.util.List;
 public class GRPCChannel {
     /**
      * origin channel
+     *
+     * TCP 连接
      */
     private final ManagedChannel originChannel;
     private final Channel channelWithDecorators;
 
+    /**
+     *
+     * @param host OAP主机
+     * @param port OAP地址
+     * @param channelBuilders
+     * @param decorators
+     * @throws Exception
+     */
     private GRPCChannel(String host, int port, List<ChannelBuilder> channelBuilders,
                         List<ChannelDecorator> decorators) throws Exception {
+        // 基于netty创建channel
         ManagedChannelBuilder channelBuilder = NettyChannelBuilder.forAddress(host, port);
 
         NameResolverRegistry.getDefaultRegistry().register(new DnsNameResolverProvider());
@@ -48,6 +59,7 @@ public class GRPCChannel {
         this.originChannel = channelBuilder.build();
 
         Channel channel = originChannel;
+        // 装饰channel 增加请求参数等
         for (ChannelDecorator decorator : decorators) {
             channel = decorator.build(channel);
         }

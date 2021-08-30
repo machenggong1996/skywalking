@@ -124,7 +124,7 @@ public class SkyWalkingAgent {
                 LOGGER.error(e, "SkyWalking agent can't active class cache.");
             }
         }
-
+        // 插件启动
         agentBuilder.type(pluginFinder.buildMatch())
                     .transform(new Transformer(pluginFinder))
                     .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)

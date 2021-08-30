@@ -14,5 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# apm-string-replace-plugin-1.x=org.apache.skywalking.apm.plugin.commons.define.StringReplaceInstrumentation
 hutool-plugin-1.x=org.apache.skywalking.apm.plugin.commons.define.HuToolInstrumentation
+# runnalbe-plugin-1.x=org.apache.skywalking.apm.plugin.commons.define.RunnableWrapperInstrumentation

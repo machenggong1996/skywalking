@@ -43,15 +43,29 @@ import org.apache.skywalking.apm.util.RunnableWithExceptionProtection;
 
 import static org.apache.skywalking.apm.agent.core.conf.Config.Collector.IS_RESOLVE_DNS_PERIODICALLY;
 
+/**
+ * 创建与维护 OAP与GRPC的连接
+ */
 @DefaultImplementor
 public class GRPCChannelManager implements BootService, Runnable {
     private static final ILog LOGGER = LogManager.getLogger(GRPCChannelManager.class);
 
     private volatile GRPCChannel managedChannel = null;
     private volatile ScheduledFuture<?> connectCheckFuture;
+    /**
+     * 是否重连
+     */
     private volatile boolean reconnect = true;
     private final Random random = new Random();
+    /**
+     * 监听器列表
+     */
     private final List<GRPCChannelListener> listeners = Collections.synchronizedList(new LinkedList<>());
+
+    /**
+     * 下面三个字段用来确定要来连接哪个OAP实例
+     * 1. grpcServers OAP地址
+     */
     private volatile List<String> grpcServers;
     private volatile int selectedIdx = -1;
     private volatile int reconnectCount = 0;
@@ -61,13 +75,22 @@ public class GRPCChannelManager implements BootService, Runnable {
 
     }
 
+    /**
+     * 启动
+     */
     @Override
     public void boot() {
+        /**
+         * 配置中是否配置OAP地址
+         */
         if (Config.Collector.BACKEND_SERVICE.trim().length() == 0) {
             LOGGER.error("Collector server addresses are not set.");
             LOGGER.error("Agent will not uplink any data.");
             return;
         }
+        /**
+         * 地址分隔
+         */
         grpcServers = Arrays.asList(Config.Collector.BACKEND_SERVICE.split(","));
         connectCheckFuture = Executors.newSingleThreadScheduledExecutor(
             new DefaultNamedThreadFactory("GRPCChannelManager")
@@ -95,6 +118,9 @@ public class GRPCChannelManager implements BootService, Runnable {
         LOGGER.debug("Selected collector grpc service shutdown.");
     }
 
+    /**
+     * boot 方法启动
+     */
     @Override
     public void run() {
         LOGGER.debug("Selected collector grpc service running, reconnect:{}.", reconnect);
@@ -116,6 +142,7 @@ public class GRPCChannelManager implements BootService, Runnable {
         }
 
         if (reconnect) {
+            // 选择连接地址
             if (grpcServers.size() > 0) {
                 String server = "";
                 try {

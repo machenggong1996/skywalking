@@ -58,7 +58,7 @@ public abstract class ClassEnhancePluginDefine extends AbstractClassEnhancePlugi
 
     /**
      * Enhance a class to intercept constructors and class instance methods.
-     *
+     * 实例方法和构造方法拦截
      * @param typeDescription target class description
      * @param newClassBuilder byte-buddy's builder to manipulate class bytecode.
      * @return new byte-buddy's builder for further manipulation.
@@ -119,6 +119,7 @@ public abstract class ClassEnhancePluginDefine extends AbstractClassEnhancePlugi
                 } else {
                     newClassBuilder = newClassBuilder.constructor(constructorInterceptPoint.getConstructorMatcher())
                                                      .intercept(SuperMethodCall.INSTANCE.andThen(MethodDelegation.withDefaultConfiguration()
+                                                             // 构造方法拦截处理
                                                                                                                  .to(new ConstructorInter(constructorInterceptPoint
                                                                                                                      .getConstructorInterceptor(), classLoader))));
                 }
@@ -208,6 +209,7 @@ public abstract class ClassEnhancePluginDefine extends AbstractClassEnhancePlugi
                 } else {
                     newClassBuilder = newClassBuilder.method(isStatic().and(staticMethodsInterceptPoint.getMethodsMatcher()))
                                                      .intercept(MethodDelegation.withDefaultConfiguration()
+                                                             // 静态方法拦截处理
                                                                                 .to(new StaticMethodsInter(interceptor)));
                 }
             }
