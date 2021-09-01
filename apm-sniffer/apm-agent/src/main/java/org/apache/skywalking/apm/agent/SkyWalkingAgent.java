@@ -133,7 +133,7 @@ public class SkyWalkingAgent {
                     .installOn(instrumentation);
 
         try {
-            // 启动
+            // 启动 启动所有BootService的实现类
             ServiceManager.INSTANCE.boot();
         } catch (Exception e) {
             LOGGER.error(e, "Skywalking agent boot failure.");

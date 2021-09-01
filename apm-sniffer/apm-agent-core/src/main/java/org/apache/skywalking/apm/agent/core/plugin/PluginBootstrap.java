@@ -40,7 +40,7 @@ public class PluginBootstrap {
      */
     public List<AbstractClassEnhancePluginDefine> loadPlugins() throws AgentPackageNotFoundException {
         AgentClassLoader.initDefaultLoader();
-
+        // 加载定义的插件文件skywalking-plugin.def
         PluginResourcesResolver resolver = new PluginResourcesResolver();
         List<URL> resources = resolver.getResources();
 
